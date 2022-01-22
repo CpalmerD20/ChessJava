@@ -28,7 +28,6 @@ public class Tile {
   public Integer getRow() {
     return row;
   }
-  
   @Override
   public String toString() {
     if(piece != null) { return "[" + piece.toString() + "]";

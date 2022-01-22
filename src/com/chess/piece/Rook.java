@@ -4,11 +4,11 @@ import com.chess.assets.AnyPiece;
 import com.chess.assets.Board;
 import com.chess.assets.Tile;
 
-public class Bishop extends AnyPiece {
+public class Rook extends AnyPiece {
 
-  public Bishop(Tile house, int color) {
+  public Rook(Tile house, int color) {
     super(house, color);
-    this.name = "Bishop";
+    this.name = "*Rook*";
     this.value = 1;
   }
 
@@ -17,7 +17,7 @@ public class Bishop extends AnyPiece {
     AnyPiece.moves.clear();
     int yPosition = getTile().getColumn().ordinal();
     int xPosition = Board.ROWS.indexOf(getTile().getRow());
-      moveDiagonal(xPosition, yPosition);
+      moveCross(xPosition, yPosition);
       removeTeamTiles();
   }
 }
