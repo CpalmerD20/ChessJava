@@ -16,22 +16,19 @@ public class Tile {
   public AnyPiece getPiece() {
     return piece;
   }
-  
   public void setPiece(AnyPiece piece) {
     this.piece = piece;
   }
-  
   public Column getColumn() {
     return column;
   }
-  
   public Integer getRow() {
     return row;
   }
   @Override
   public String toString() {
-    if(piece != null) { return "[" + piece.toString() + "]";
+    if(piece != null) { return piece.toString();
     } 
-    return "[   " + column + row + "   ]";
+    return "" + column + row;
   }
 }

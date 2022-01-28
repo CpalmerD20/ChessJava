@@ -1,11 +1,11 @@
 package com.chess.app;
 
 import com.chess.assets.Board;
+import com.chess.gui.Frame;
 
-public class App {
+public class Main {
   public static void main(String[] args) {
-    var board = new Board(); 
-    board.show();
-    
+    new Board(); 
+    new Frame();
   }
 }

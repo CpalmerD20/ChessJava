@@ -35,7 +35,6 @@ public class King extends AnyPiece {
     //add in check conditions  
     //remove tiles opponents can move to
     //utilizes list in Player class
-    //maybe move to AnyPiece class
   }
 
 }

@@ -3,14 +3,15 @@ package com.chess.assets;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import com.chess.gui.Frame;
 
 public class Player {
   public static List<Tile> opponentMoves = new ArrayList<>();
+  private static int whiteMaterial;
+  private static int blackMaterial;
+  private static int turn = 0;
   private Color color;
   private String name;
-  private int whiteMaterial;
-  private int blackMaterial;
-  private static int turns = 0;
   
   //start of each turn, clear opponentMoves and run method to aggregate.
   //TODO loops through tiles, looks for pieces of the opposing color, and aggregates their moves.
@@ -21,11 +22,7 @@ public class Player {
     this.name = this.color == Color.BLACK ? "Black Team" : "White Team";
   }
   
-  public String getName() {
-    return name;
-  }
-  
-  public void getMaterials() {
+  public static void updateMaterials() {
     whiteMaterial = 0;
     blackMaterial = 0;
     for(int i = 0; i < Board.tiles.length; i++) {
@@ -49,7 +46,18 @@ public class Player {
   public int getBlackMaterial() {
     return blackMaterial;
   }
-  public static int getTurns() {
-    return turns;
+  public static int getTurn() {
+    return turn;
+  }
+  public String getName() {
+    return name;
+  }
+  public Color getColor() {
+    return color;
+  }
+  public static void nextTurn() {
+    turn++;
+    AnyPiece.moves.clear();
+    Frame.updateButtons();
   }
 }
