@@ -53,19 +53,4 @@ public class Board {
     var knight76 = new Knight(tiles[7][6], 1);
     var rook77 = new Rook(tiles[7][7], 1);
   }
-  
-  public void show() {
-    System.out.println();
-    for(int i = 0; i < tiles.length; i++) {
-      System.out.print(8 - i + " ");
-      for(int ii = 0; ii < tiles.length; ii++) {
-        System.out.print(tiles[i][ii].toString());
-      }
-      System.out.println();
-    }
-    System.out.println();
-    for(Column column : Column.values()) {
-      System.out.print("      " + column + "   ");
-    }
-  }
 }

@@ -8,8 +8,9 @@ import com.chess.assets.Tile;
 public class Pawn extends AnyPiece {
   
   private boolean firstMove = true;
-  //private boolean movedTwo = false; 
-  //needs to be reset at the start of each round
+  private boolean movedTwo = false;  
+  //TODO needs to be reset to false at the start of the player's turn
+  //if player.color == Color.Black reset movedTwo for black pieces.
 
   public Pawn(Tile house, int color) {
     super(house, color);
@@ -23,31 +24,46 @@ public class Pawn extends AnyPiece {
     int yPosition = getTile().getColumn().ordinal();
     int xPosition = Board.ROWS.indexOf(getTile().getRow());
     int direction = this.color == Color.BLACK ? 1 : -1;
-
-    //TODO enPassant();
-    //if opposing pawn moved two last turn, is adjacent, and same row
     
+//    if((firstMove == true && Board.tiles[xPosition + direction][yPosition].getPiece() == null)) {
+//      checkMove(xPosition + (direction * 2), yPosition); //TODO if condition is reaching out of bounds
+//    }
+    enPassant(xPosition, yPosition);
+    checkMove(xPosition + direction, yPosition);
     checkAttack(xPosition, yPosition, direction);
-    if((firstMove == true && 
-        Board.tiles[xPosition][yPosition + direction].getPiece() == null)
-    && (Board.tiles[xPosition][yPosition + (direction * 2)].getPiece() == null)) {
-      testMove(xPosition, yPosition + (direction * 2));
-    }
-    if(Board.tiles[xPosition][yPosition + direction].getPiece() == null) {
-      testMove(xPosition, yPosition + direction);
+  }
+  
+  private void enPassant(int x, int y) {
+    // TODO check row for an adjacent pawn that moved two tiles last turn.
+  }
+
+  private void checkMove(int x, int y) {
+    if(!(x > 7 || x < 0) && !(y > 7 || y < 0)) {
+      AnyPiece resident = Board.tiles[x][y].getPiece(); 
+      if(resident == null) {
+        moves.add(Board.tiles[x][y]);
+      }
     }
   }
 
   private void checkAttack(int xPosition, int yPosition, int d) {
-    if((xPosition + 1 < 8 || xPosition + 1 >= 0) && (yPosition + d < 8 || yPosition + d >= 0)) {
-      if (Board.tiles[xPosition + 1][yPosition + d].getPiece() != null) {
-        testMove(xPosition + 1, yPosition + d);
+    
+    if(!(xPosition + d > 7 || xPosition + d < 0) && !(yPosition + 1 > 7 || yPosition + 1 < 0)) {
+      if (Board.tiles[xPosition + d][yPosition + 1].getPiece() != null) {
+        testMove(xPosition + d, yPosition + 1);
       }
     }
-    if((xPosition - 1 < 8 || xPosition - 1 >= 0) && (yPosition + d < 8 || yPosition + d >= 0)) {
-      if (Board.tiles[xPosition - 1][yPosition + d].getPiece() != null) {
-        testMove(xPosition - 1, yPosition + d);
+    if(!(xPosition + d > 7 || xPosition + d < 0) && !(yPosition - 1 > 7 || yPosition - 1 < 0)) {
+      if (Board.tiles[xPosition + d][yPosition - 1].getPiece() != null) {
+        testMove(xPosition + d, yPosition - 1);
       }
     }
+  }
+
+  public boolean getMovedTwo() {
+    return movedTwo;
+  }
+  public void setMovedTwo(boolean movedTwo) {
+    this.movedTwo = movedTwo;
   }
 }
