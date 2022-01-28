@@ -3,6 +3,7 @@ package com.chess.assets;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AnyPiece {
 
@@ -44,84 +45,73 @@ public abstract class AnyPiece {
     }
   }
 
-  //TODO Currently getting index out of bounds exceptions
   protected void moveCross(int x, int y) {
-    for(int d = 1; d < 8; d++) {
-      int down = y + d, up = y - d, right = x + d, left = x - d;
-      
-      if(!outOfBounds(right)) {
-        if(Board.tiles[right][y].getPiece() != null) {
-          moves.add(Board.tiles[right][y]);
-          break;
-        } else { moves.add(Board.tiles[right][y]);
-        }
+    for(int i = 1; i < 8; i++) {
+      int down = x + i;
+      if(!outOfBounds(down)) {
+        moves.add(Board.tiles[down][y]);
+        if(Board.tiles[down][y].getPiece() != null) { break; }
       }
-      if(!outOfBounds(left)) { 
-        if( Board.tiles[left][y].getPiece() != null) {
-          moves.add(Board.tiles[left][y]);
-          break;
-        } else { moves.add(Board.tiles[left][y]);
-        }
-      }
+    }  
+    for(int i = 1; i < 8; i++) {
+      int up = x - i;
       if(!outOfBounds(up)) { 
-        if( Board.tiles[x][up].getPiece() != null) {
-          moves.add(Board.tiles[x][up]);
-          break;
-        } else { moves.add(Board.tiles[x][up]);
-        }
+        moves.add(Board.tiles[up][y]);
+        if( Board.tiles[up][y].getPiece() != null) { break; }
       }
-      if(!outOfBounds(down)) { 
-        if( Board.tiles[x][up].getPiece() != null) {
-          moves.add(Board.tiles[x][down]);
-          break;
-        } else { moves.add(Board.tiles[x][down]);
-        }
+    }
+    for(int i = 1; i < 8; i++) {
+      int right = y - i;
+      if(!outOfBounds(right)) { 
+        moves.add(Board.tiles[x][right]);
+        if( Board.tiles[x][right].getPiece() != null) { break; }
+      }
+    }
+    for(int i = 1; i < 8; i++) {
+      int left = y + i;
+      if(!outOfBounds(left)) { 
+        moves.add(Board.tiles[x][left]);
+        if( Board.tiles[x][left].getPiece() != null) { break; }
       }
     }
   }
   
-  //TODO Currently getting index out of bounds exceptions
   protected void moveDiagonal(int x, int y) {
     for(int d = 1; d < 8; d++) {
-      int down = y + d, up = y + d, right = x + d, left = x - d;
-      
-      if(!outOfBounds(right) && !outOfBounds(down)) {
-        if(Board.tiles[right][down].getPiece() != null) {
-          moves.add(Board.tiles[right][down]);
-          break;
-        } else { moves.add(Board.tiles[right][down]);
-        }
+      int left = y - d, down = x + d;
+      if(!outOfBounds(down) && !outOfBounds(left)) {
+        moves.add(Board.tiles[down][left]);
+        if(Board.tiles[down][left].getPiece() != null) { break; }
       }
-      if(!outOfBounds(left) && !outOfBounds(down)) { 
-        if( Board.tiles[left][down].getPiece() != null) {
-          moves.add(Board.tiles[left][down]);
-          break;
-        } else { moves.add(Board.tiles[left][down]);
-        }
+    }
+    for(int d = 1; d < 8; d++) {
+      int right = y + d, down = x + d;
+      if(!outOfBounds(down) && !outOfBounds(right)) { 
+        moves.add(Board.tiles[down][right]);
+        if(Board.tiles[down][right].getPiece() != null) { break; }
       }
-      if(!outOfBounds(right) && !outOfBounds(up)) { 
-        if( Board.tiles[right][up].getPiece() != null) {
-          moves.add(Board.tiles[right][up]);
-          break;
-        } else { moves.add(Board.tiles[right][up]);
-        }
+    }
+    for(int d = 1; d < 8; d++) {
+      int right = y + d, up = x - d;
+      if(!outOfBounds(up) && !outOfBounds(right)) { 
+        moves.add(Board.tiles[up][right]);
+        if(Board.tiles[up][right].getPiece() != null) { break; }
       }
-      if(!outOfBounds(left) && !outOfBounds(up)) { 
-        if( Board.tiles[left][up].getPiece() != null) {
-          moves.add(Board.tiles[left][up]);
-          break;
-        } else { moves.add(Board.tiles[left][up]);
-        }
+    }
+    for(int d = 1; d < 8; d++) {
+      int left = y - d, up = x - d;
+      if(!outOfBounds(up) && !outOfBounds(left)) { 
+        moves.add(Board.tiles[up][left]);
+        if(Board.tiles[up][left].getPiece() != null) { break; } 
       }
     }
   }
   
   protected void removeTeamTiles() {
-    for(Tile move : moves) {
-      if(move.getPiece().getColor() == this.color) {
-        moves.remove(move);
-      }
-    }
+    List<Tile> legalMoves = moves.stream()
+        .filter((house) -> house.getPiece() == null || house.getPiece().getColor() != this.color)
+        .collect(Collectors.toList());
+    moves = legalMoves;
   }
   
   public Tile getTile() {
